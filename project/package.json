@@ -1,4 +1,7 @@
 {
+  "name": "quote-api",
+  "version": "1.0.0",
+  "type": "commonjs",
   "dependencies": {
     "canvas": "^3.2.1",
     "axios": "^1.6.8"
