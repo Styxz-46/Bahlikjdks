@@ -11,13 +11,10 @@ module.exports = async (req, res) => {
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext("2d");
 
-  // Background
   ctx.fillStyle = "#f2f2f2";
   ctx.fillRect(0, 0, width, height);
 
-  // Header
-  const headerY = 120;
-
+  // avatar
   if (avatarUrl) {
     try {
       const response = await axios.get(avatarUrl, {
@@ -25,21 +22,18 @@ module.exports = async (req, res) => {
       });
       const avatar = await loadImage(response.data);
 
-      const size = 80;
       ctx.save();
       ctx.beginPath();
-      ctx.arc(140, headerY, size / 2, 0, Math.PI * 2);
+      ctx.arc(140, 120, 40, 0, Math.PI * 2);
       ctx.clip();
-      ctx.drawImage(avatar, 100, headerY - size / 2, size, size);
+      ctx.drawImage(avatar, 100, 80, 80, 80);
       ctx.restore();
-    } catch (e) {}
+    } catch {}
   }
 
   ctx.fillStyle = "#000";
   ctx.font = "bold 36px Sans";
-  ctx.textAlign = "left";
-  ctx.textBaseline = "middle";
-  ctx.fillText(username, 200, headerY);
+  ctx.fillText(username, 200, 120);
 
   ctx.font = "bold 52px Sans";
   ctx.textAlign = "center";
@@ -54,13 +48,13 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   let line = "";
   let lines = [];
 
-  for (let i = 0; i < words.length; i++) {
-    const testLine = line + words[i] + " ";
-    if (ctx.measureText(testLine).width > maxWidth && i > 0) {
+  for (let word of words) {
+    const test = line + word + " ";
+    if (ctx.measureText(test).width > maxWidth) {
       lines.push(line);
-      line = words[i] + " ";
+      line = word + " ";
     } else {
-      line = testLine;
+      line = test;
     }
   }
   lines.push(line);
